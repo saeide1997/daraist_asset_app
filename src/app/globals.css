@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
-:root {
+/* :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #ffffff;
+} */
+
+@font-face {
+  font-family: 'Samim';
+  src: url('/fonts/Samim.eot'); 
+  src: url('/fonts/Samim.eot') format('embedded-opentype'),
+  url('/fonts/Samim.woff') format('woff'),
+  url('/fonts/Samim.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Samim-Bold';
+  src: url('/fonts/Samim-Bold.eot'); 
+  src: url('/fonts/Samim-Bold.eot') format('embedded-opentype'),
+  url('/fonts/Samim-Bold.woff') format('woff'),
+  url('/fonts/Samim-Bold.ttf') format('truetype');
 }
 
 @theme inline {
@@ -13,14 +29,25 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* :root {
+     --background: #ffffff; 
+    --foreground: #ededed; 
+  } */
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Samim;
+  direction: rtl;
+}
+canvas {
+  background:
+white;
+border-radius: 10px;
+}
+
+.boxShadow{
+
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }

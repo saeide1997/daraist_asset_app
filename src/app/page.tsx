@@ -1,103 +1,117 @@
+// pages/index.tsx
+
 import Image from "next/image";
+import SavingsIcon from "@mui/icons-material/Savings";
+import Asset from "./components/Asset";
+import { AssetChart } from "./components/AssetChart";
+import Menu from "./components/Menu";
+import { getAssets, fetchMarketPrices } from "./lib/actions";
+import { AssetType } from "./types/asset";
+import Link from "next/link";
+import data from './data.js';
 
-export default function Home() {
+export default async function Home() {
+  const assets: AssetType[] = await getAssets();
+  const prices = data //await fetchMarketPrices();
+  // console.log(prices);
+
+  let totalValue = 0;
+
+  assets.forEach((item) => {
+    const price = prices?.gold?.find(itemm=> itemm.symbol == item.assetType); // قیمت واحد
+console.log('price',price);
+
+    if (!price) return; // اگر قیمت برای اون دارایی نبود، رد کن
+
+    const value = item.assetAmount * price?.price; // ارزش دارایی
+    totalValue += value;
+  });
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="grid gap-3 !h-[calc(100vh-8rem)] bg-slate-200/50">
+      <div className="bg-[#234350] h-24 text-white flex justify-center items-center rounded-b-4xl">
+        <span className="text-3xl mx-2">دارایی‌های من</span>
+        <div>
+          <SavingsIcon className="!text-5xl" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+
+      <div className="py-2 grid gap-2">
+        {assets.slice(0, 3).map((item, index) => {
+          let assetType = "";
+          let assetAmountType = "";
+
+          switch (item.assetType) {
+            case "IR_GOLD_18K":
+              assetType = "طلا ۱۸ عیار";
+              break;
+            case "IR_GOLD_24K":
+              assetType = "طلا ۲۴ عیار";
+              break;
+            case "IR_COIN_EMAMI":
+              assetType = "سکه امامی";
+              break;
+            case "IR_COIN_BAHAR":
+              assetType = "سکه بهار آزادی";
+              break;
+            case "IR_COIN_HALF":
+              assetType = "نیم سکه";
+              break;
+            case "IR_COIN_QUARTER":
+              assetType = "ربع سکه";
+              break;
+            case "IR_COIN_1G":
+              assetType = "گرمی سکه";
+              break;
+            case "usd":
+              assetType = "دلار";
+              break;
+            default:
+              assetType = item.assetType;
+          }
+
+          switch (item.assetAmountType) {
+            case "gram":
+              assetAmountType = "گرم";
+              break;
+            case "number":
+              assetAmountType = "عدد";
+              break;
+            default:
+              assetAmountType = item.assetAmountType;
+          }
+
+          return (
+            <Asset
+              key={item._id || index}
+              amount={assetType}
+              assType={item.assetAmount}
+              amountType={assetAmountType || "واحد"}
+              asset="0"
+            />
+          );
+        })}
+      </div>
+
+      <div className="bg-[#234350] h-16 mx-4 text-white flex justify-center items-center boxShadow rounded-4xl">
+        <span className="text-lg mx-2">جمع کل دارایی بروز: </span>
+        <span className="text-xl">{totalValue}</span>
+        <span className="text-xl mx-1">ریال</span>
+      </div>
+
+      <div className="boxShadow mx-4">
+        <AssetChart />
+      </div>
+
+      <div>
+        <Link href="/newAsset">
+          <div className="bg-[#e3b34a] h-16 mx-4 text-white flex justify-center items-center boxShadow rounded-4xl text-2xl font-bold">
+            افزودن دارایی جدید
+          </div>
+        </Link>
+      </div>
+
+      <Menu />
     </div>
   );
 }
