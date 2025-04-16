@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+/* :root {
+  --background: #ffffff;
+  --foreground: #ffffff;
+} */
+
+@font-face {
+  font-family: 'Samim';
+  src: url('/fonts/Samim.eot'); 
+  src: url('/fonts/Samim.eot') format('embedded-opentype'),
+  url('/fonts/Samim.woff') format('woff'),
+  url('/fonts/Samim.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Samim-Bold';
+  src: url('/fonts/Samim-Bold.eot'); 
+  src: url('/fonts/Samim-Bold.eot') format('embedded-opentype'),
+  url('/fonts/Samim-Bold.woff') format('woff'),
+  url('/fonts/Samim-Bold.ttf') format('truetype');
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  /* :root {
+     --background: #ffffff; 
+    --foreground: #ededed; 
+  } */
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Samim;
+  direction: rtl;
+}
+canvas {
+  background:
+white;
+border-radius: 10px;
+}
+
+.boxShadow{
+
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.loader {
+  border: 6px solid #f3f3f3; /* خاکستری روشن */
+  border-top: 6px solid #e3b34a; 
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
