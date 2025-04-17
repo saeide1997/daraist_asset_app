@@ -12,12 +12,11 @@ export default async function getUserAssets(req, res) {
 
   if (req.method === "GET") {
     try {
-      const cookies = cookie.parse(req.headers.cookie || "");
+      const rawCookies = req.headers?.cookie || "";
+      const cookies = cookie.parse(rawCookies);
       const token = cookies.token;
 
       if (!token) {
-        res.status(404).json({ token: 4 });
-
         return res.status(401).json({ success: false, error: "توکن موجود نیست" });
       }
 
@@ -27,8 +26,9 @@ export default async function getUserAssets(req, res) {
 
       if (!user) return res.status(401).json({ success: false, error: "کاربر یافت نشد" });
 
-      // پیدا کردن تمام دارایی‌های متعلق به کاربر
       const assets = await Asset.find({ user_id: user._id });
+
+      return res.status(200).json(assets);
 
     } catch (error) {
       console.error("خطا در گرفتن دارایی‌ها:", error);
