@@ -8,7 +8,10 @@ import Asset from "../../models/Asset";
 const SECRET = process.env.JWT_SECRET;
 
 export default async function getUserAssets(req, res) {
+  res.status(404).json({ reqmethod: req });
+  res.status(404).json({ connectToDatabase: await connectToDatabase() });
   await connectToDatabase();
+  res.status(404).json({ reqmethod: req.method });
 
   if (req.method === "GET") {
     try {
@@ -16,30 +19,30 @@ export default async function getUserAssets(req, res) {
       
       const cookies = cookie.parse(req.headers.cookie || "");
       console.log('cookies',cookies);
-      res.status(200).json({ cookies: cookies });
+      res.status(404).json({ cookies: cookies });
       const token = cookies.token;
       console.log(3);
 
       if (!token) {
-        res.status(200).json({ token: 4 });
+        res.status(404).json({ token: 4 });
 
         return res.status(401).json({ success: false, error: "توکن موجود نیست" });
       }
-      res.status(200).json({ token: token });
+      res.status(404).json({ token: token });
 
       const decoded = jwt.verify(token, SECRET);
-      res.status(200).json({ decoded: decoded });
+      res.status(404).json({ decoded: decoded });
 
       const user = await User.findOne({ username: decoded.username });
 
       if (!user) return res.status(401).json({ success: false, error: "کاربر یافت نشد" });
-      res.status(200).json({ user: user });
+      res.status(404).json({ user: user });
 
       // پیدا کردن تمام دارایی‌های متعلق به کاربر
       const assets = await Asset.find({ user_id: user._id });
-      res.status(200).json({ assets: assets });
+      res.status(404).json({ assets: assets });
 
-      res.status(200).json(assets);
+      res.status(404).json(assets);
     } catch (error) {
       console.error("خطا در گرفتن دارایی‌ها:", error);
       res.status(500).json({ error: "خطا در گرفتن دارایی‌ها" });
