@@ -1,5 +1,6 @@
-module.exports = {
-  experimental: {
-    externalDir: true,
-  },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'standalone',
 };
+
+module.exports = nextConfig;
