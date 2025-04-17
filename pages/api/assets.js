@@ -13,6 +13,10 @@ export default async function getUserAssets(req, res) {
   if (req.method === "GET") {
     try {
       const rawCookies = req.headers?.cookie || "";
+      if (!rawCookies) {
+        return res.status(401).json({ success: false, error: "کوکی یافت نشد" });
+      }
+      
       const cookies = cookie.parse(rawCookies);
       const token = cookies.token;
 
@@ -21,7 +25,10 @@ export default async function getUserAssets(req, res) {
       }
 
       const decoded = jwt.verify(token, SECRET);
-
+      if (!decoded) {
+        return res.status(401).json({ success: false, error: "توکن معتبر نیست" });
+      }
+      
       const user = await User.findOne({ username: decoded.username });
 
       if (!user) return res.status(401).json({ success: false, error: "کاربر یافت نشد" });
