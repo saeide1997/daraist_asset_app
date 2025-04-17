@@ -36,7 +36,12 @@ export default function Home() {
   useEffect(() => {
     const fetchAssets = async () => {
       try {
-        const response = await fetch("/api/assets");
+        const response = await fetch("/api/assets",
+          {
+            method: "GET",
+            credentials: "include", // حتماً این باشه!
+          });
+        
         if (response.ok) {
           const data = await response.json();
           setAssets(data);
