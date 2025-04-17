@@ -16,28 +16,28 @@ export default async function getUserAssets(req, res) {
       
       const cookies = cookie.parse(req.headers.cookie || "");
       console.log('cookies',cookies);
-
+      res.status(200).json({ cookies: cookies });
       const token = cookies.token;
       console.log(3);
 
       if (!token) {
-      console.log(4);
+        res.status(200).json({ token: 4 });
 
         return res.status(401).json({ success: false, error: "توکن موجود نیست" });
       }
-      console.log('token',token);
+      res.status(200).json({ token: token });
 
       const decoded = jwt.verify(token, SECRET);
-      console.log('decoded',decoded);
+      res.status(200).json({ decoded: decoded });
 
       const user = await User.findOne({ username: decoded.username });
 
       if (!user) return res.status(401).json({ success: false, error: "کاربر یافت نشد" });
-      console.log('user',user);
+      res.status(200).json({ user: user });
 
       // پیدا کردن تمام دارایی‌های متعلق به کاربر
       const assets = await Asset.find({ user_id: user._id });
-      console.log('assets',assets);
+      res.status(200).json({ assets: assets });
 
       res.status(200).json(assets);
     } catch (error) {
