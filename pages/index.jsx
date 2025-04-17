@@ -41,7 +41,7 @@ export default function Home() {
             method: "GET",
             credentials: "include", // حتماً این باشه!
           });
-        
+      
         if (response.ok) {
           const data = await response.json();
           setAssets(data);

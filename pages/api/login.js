@@ -23,10 +23,10 @@ export default async function handler(req, res) {
 
     const token = jwt.sign({ username }, SECRET, { expiresIn: "1y" });
 
-    // ست‌کردن کوکی با استفاده از پکیج cookie
+    // تنظیم صحیح کوکی
     res.setHeader("Set-Cookie", cookie.serialize("token", token, {
       httpOnly: true,
-      httpsOnly: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 365, // یک سال
