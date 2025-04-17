@@ -55,15 +55,6 @@
 [[redirects]]
   # ریدایرکت به صفحات API برای CORS
   from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  to = "/.netlify/"
   status = 200
   force = true
-
-[context.production.environment]
-  NODE_ENV = "production"  # پیکربندی برای محیط تولید
-
-[context.deploy-preview.environment]
-  NODE_ENV = "development"  # پیکربندی برای پیش‌نمایش‌های دیپلوی
-
-[context.branch-deploy.environment]
-  NODE_ENV = "production"  # پیکربندی برای دیپلوی‌های شاخه‌ای
