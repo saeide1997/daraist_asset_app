@@ -12,8 +12,8 @@ export default async function getUserAssets(req, res) {
 
   if (req.method === "GET") {
     try {
+      res.status(404).json({ cookies: req.method });
       const cookies = cookie.parse(req.headers.cookie || "");
-      res.status(404).json({ cookies: cookies });
       const token = cookies.token;
 
       if (!token) {
