@@ -9,7 +9,6 @@ const SECRET = process.env.JWT_SECRET;
 
 export default async function getUserAssets(req, res) {
   await connectToDatabase();
-  res.status(404).json({ reqmethod: req.method });
 
   if (req.method === "GET") {
     try {
