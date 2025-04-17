@@ -27,12 +27,13 @@ export default async function handler(req, res) {
     res.setHeader("Set-Cookie", cookie.serialize("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "strict",
       path: "/",
       maxAge: 60 * 60 * 24 * 365, // یک سال
     }));
 
-    return res.status(200).json({ success: true });
+    res.setHeader('Set-Cookie', serialized);
+  res.status(200).json({ success: true });
 
   } catch (err) {
     console.error("Login error:", err);
