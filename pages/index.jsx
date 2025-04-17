@@ -22,6 +22,8 @@ export default function Home() {
 
   useEffect(() => {
     const checkAuth = async () => {
+      const cookies = document.cookie; // کوکی‌ها را در سمت کلاینت بررسی کنید
+      console.log(cookies); // چاپ کوکی‌ها
       const res = await fetch("/api/auth/checkToken");
       const data = await res.json();
   
