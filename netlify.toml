@@ -2,7 +2,7 @@
 
 [build]
   command = "npm run build" # دستور ساخت پروژه شما (اگر دستور خاصی دارید اینجا قرار دهید)
-  publish = "https://daraist.netlify.app/"  # مسیر ساخت اپلیکیشن (معمولاً "out" برای پروژه‌های Next.js PWA)
+  publish = ".next"  # مسیر ساخت اپلیکیشن (معمولاً "out" برای پروژه‌های Next.js PWA)
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"  # پشتیبانی از Next.js
@@ -26,7 +26,7 @@
 
 [functions]
   # تنظیمات مربوط به توابع Netlify
-  directory = "netlify/functions"  # مسیر توابع Netlify
+  directory = "netlify"  # مسیر توابع Netlify
   node_bundler = "esbuild"  # برای استفاده از esbuild
 
 [dev]
