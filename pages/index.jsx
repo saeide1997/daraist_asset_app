@@ -12,7 +12,6 @@ import jwt from "jsonwebtoken";
 import { redirect } from "next/navigation";
 import { useRouter } from "next/router";
 
-const SECRET = process.env.JWT_SECRET;
 export default function Home() {
   const [assets, setAssets] = useState([]);
   const [prices, setPrices] = useState([]);
@@ -24,7 +23,9 @@ export default function Home() {
     const checkAuth = async () => {
       const cookies = document.cookie; // کوکی‌ها را در سمت کلاینت بررسی کنید
       console.log(cookies); // چاپ کوکی‌ها
-      const res = await fetch("/api/auth/checkToken");
+      const res = await fetch("/api/auth/checkToken", {
+        credentials: "include",
+      });
       const data = await res.json();
   
       if (!data.valid) {

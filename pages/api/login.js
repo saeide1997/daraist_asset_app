@@ -23,17 +23,17 @@ export default async function handler(req, res) {
 
     const token = jwt.sign({ username }, SECRET, { expiresIn: "1y" });
 
-    // تنظیم صحیح کوکی
-    res.setHeader("Set-Cookie", cookie.serialize("token", token, {
+    // ✅ تنظیم کوکی درست و فقط یک بار
+    const serialized = cookie.serialize("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
-      maxAge: 60 * 60 * 24 * 365, // یک سال
-    }));
+      maxAge: 60 * 60 * 24 * 365,
+    });
 
-    res.setHeader('Set-Cookie', serialized);
-  res.status(200).json({ success: true });
+    res.setHeader("Set-Cookie", serialized); // فقط این!
+    res.status(200).json({ success: true });
 
   } catch (err) {
     console.error("Login error:", err);
