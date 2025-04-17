@@ -8,8 +8,7 @@ import Asset from "../../models/Asset";
 const SECRET = process.env.JWT_SECRET;
 
 export default async function getUserAssets(req, res) {
-  res.status(404).json({ reqmethod: req });
-  res.status(404).json({ connectToDatabase: await connectToDatabase() });
+  res.status(404).json({ connectToDatabase: await connectToDatabase() })
   await connectToDatabase();
   res.status(404).json({ reqmethod: req.method });
 
