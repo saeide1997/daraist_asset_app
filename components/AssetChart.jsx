@@ -59,6 +59,6 @@ import {
   };
   
   export function AssetChart() {
-    return <Line options={options} data={data} />;
+    return <Line className='w-full' options={options} data={data} />;
   }
   

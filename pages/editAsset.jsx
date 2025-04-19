@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Menu from "../components/Menu";
 import { useRouter, useSearchParams } from "next/navigation";
 import { EditSquare } from "@mui/icons-material";
 
@@ -144,8 +143,6 @@ export default function NewAssetPage() {
           ویرایش
         </button>
       </form>
-
-      <Menu />
     </div>
   );
 }

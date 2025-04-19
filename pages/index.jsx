@@ -3,16 +3,12 @@ import { useEffect, useState } from "react";
 import SavingsIcon from "@mui/icons-material/Savings";
 import Asset from "../components/Asset";
 import { AssetChart } from "../components/AssetChart";
-import Menu from "../components/Menu";
 import Link from "next/link";
-import data from "../data.js";
 import { formatNumber } from '../utils/formatNymber';
-import Cookies from 'js-cookie'
-import jwt from "jsonwebtoken";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/router";
 
 export default function Home() {
+  const [data, setData] = useState([]);
   const [assets, setAssets] = useState([]);
   const [prices, setPrices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -94,7 +90,18 @@ export default function Home() {
   });
 
   useEffect(() => {
-    fetch("/api/saveTotalValue");
+    fetch("/api/saveTotalAsset");
+  }, []);
+
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      const res = await fetch("/api/stats");
+      const json = await res.json();
+      setData(json);
+    };
+
+    fetchStats();
   }, []);
 
   if (loading) {
@@ -111,7 +118,7 @@ export default function Home() {
   }
 
   return (
-    <div className="!h-[calc(100vh-2rem)] bg-slate-200/50">
+    <div className=" bg-slate-200/50">
       <div className="bg-[#234350] h-24 mb-3 text-white flex justify-center items-center rounded-b-4xl">
         <span className="text-3xl mx-2">دارایی‌های من</span>
         <div>
@@ -200,8 +207,6 @@ export default function Home() {
           </div>
         </Link>
       </div>
-
-      <Menu />
     </div>
   );
 }

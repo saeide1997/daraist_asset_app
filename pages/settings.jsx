@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Menu from "../components/Menu";
 import { Settings } from "@mui/icons-material";
 
 export default function SettingsPage() {
@@ -25,7 +24,6 @@ export default function SettingsPage() {
           <span> درباره دارايیست</span>
         </Link>
       </div>
-      <Menu />
     </div>
   );
 }

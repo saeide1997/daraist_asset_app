@@ -13,7 +13,6 @@ export default async function crudAsset(req, res) {
 
   // GET → دریافت دارایی بر اساس id
   if (req.method === "GET") {
-    console.log('req.query', req.query);
     
     const { id } = req.query;
 
@@ -70,7 +69,6 @@ export default async function crudAsset(req, res) {
           { $set: updateData }
         );
         
-        console.log('body', result);
       if (result.matchedCount === 0) {
         return res.status(404).json({ error: "دارایی یافت نشد" });
       }
@@ -89,7 +87,19 @@ export default async function crudAsset(req, res) {
     if (!id) return res.status(400).json({ error: "شناسه برای حذف الزامی است" });
 
     try {
-      const result = await Asset.deleteOne({ _id: id });
+      const cookies = cookie.parse(req.headers.cookie || "");
+      const token = cookies.token;
+
+      if (!token) {
+        return res.status(401).json({ success: false, error: "توکن موجود نیست" });
+      }
+
+      const decoded = jwt.verify(token, SECRET);
+      const user = await User.findOne({ username: decoded.username });
+      
+      if (!user) return res.status(401).json({ success: false, error: "کاربر یافت نشد" });
+
+      const result = await Asset.deleteOne({ _id: id, user_id: user._id });
 
       if (result.deletedCount === 0)
         return res.status(404).json({ error: "دارایی یافت نشد" });

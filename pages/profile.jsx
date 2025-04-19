@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useState } from "react";
-import Menu from "../components/Menu";
 import { useRouter } from "next/navigation";
 import { Portrait, Settings } from "@mui/icons-material";
 
@@ -87,7 +86,6 @@ export default function Profile() {
           ذخیره
         </button>
       </form>
-      <Menu />
     </div>
   );
 }

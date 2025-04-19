@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Menu from "../components/Menu";
 import { useRouter } from "next/navigation";
 import { FormatListBulletedAdd } from "@mui/icons-material";
 
@@ -105,7 +104,6 @@ export default function NewAssetPage() {
           ذخیره
         </button>
       </form>
-      <Menu />
     </div>
   );
 }

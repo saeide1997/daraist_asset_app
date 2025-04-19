@@ -7,7 +7,6 @@ import {
   PlaylistAdd,
   RemoveCircleOutline,
 } from "@mui/icons-material";
-import Menu from "../components/Menu";
 import Link from "next/link";
 import data from "../data";
 import { useEffect, useState } from "react";
@@ -195,7 +194,6 @@ export default function Home() {
           );
         })}
       </div>
-      <Menu />
     </div>
   );
 }
