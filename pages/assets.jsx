@@ -1,14 +1,11 @@
-// pages/index.tsx
+// pages/assets.jsx
 
 import {
-  BorderColor,
   EditSquare,
   FormatListBulleted,
-  PlaylistAdd,
   RemoveCircleOutline,
 } from "@mui/icons-material";
 import Link from "next/link";
-import data from "../data";
 import { useEffect, useState } from "react";
 import { formatNumber } from '../utils/formatNymber';
 

@@ -34,6 +34,7 @@ export default async function getUserAssets(req, res) {
       if (!user) return res.status(401).json({ success: false, error: "کاربر یافت نشد" });
 
       const assets = await Asset.find({ user_id: user._id });
+      res.setHeader('Cache-Control', 'no-store')
 
       return res.status(200).json(assets);
 
