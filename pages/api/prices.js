@@ -10,7 +10,7 @@ export default async function prices(req, res) {
   
         const data = await response.json();
         // console.log('API response data:', data); // اینو ببین تو ترمینال سرورت
-        
+        res.setHeader('Cache-Control', 'no-store')
         return res.status(200).json(data);
   
       } catch (error) {
