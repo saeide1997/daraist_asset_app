@@ -99,6 +99,8 @@ export default function Home() {
       const res = await fetch("/api/stats");
       const json = await res.json();
       setData(json);
+      console.log('stat', json);
+      
     };
 
     fetchStats();

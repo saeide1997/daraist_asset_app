@@ -1,8 +1,8 @@
-//pages/login.jsx
+"use client";
 
 import { useState } from "react";
 
-export default function LoginPage() {
+export default function LoginSignUpPage() {
   const [form, setForm] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -17,16 +17,16 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch("/api/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
-      if (!res.ok) throw new Error("نام کاربری یا رمز اشتباه است");
+    //   if (!res.ok) throw new Error("نام کاربری یا رمز اشتباه است");
 
       // بعد از ورود موفق، برو به داشبورد
-      window.location.href = "/"; // مثلاً صفحه دارایی‌ها
+    //   window.location.href = "/"; 
     } catch (err) {
       setError(err.message);
     } finally {
@@ -67,6 +67,28 @@ export default function LoginPage() {
             required
           />
         </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium  mx-2 my-1">شماره همراه </label>
+          <input
+            type="text"
+            name="number"
+            value={form.number}
+            onChange={handleChange}
+            className="w-full px-3 boxShadow py-2 border border-[#234350] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium  mx-2 my-1">شماره همراه </label>
+          <input
+            type="text"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full px-3 boxShadow py-2 border border-[#234350] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
+          />
+        </div>
 
         {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
 
@@ -75,7 +97,7 @@ export default function LoginPage() {
           disabled={loading}
           className="w-full bg-[#234350] cursor-pointer boxShadow hover:shadow-lg text-white py-2 rounded-xl hover:bg-[#e3b34a] transition"
         >
-          {loading ? "در حال ورود..." : "ورود"}
+          {loading ? "در حال ثبتنام..." : "ثبتنام"}
         </button>
       </form>
     </div>

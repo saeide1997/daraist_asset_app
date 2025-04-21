@@ -1,3 +1,5 @@
+//pages/api/stats.js
+
 import moment from "moment-jalaali";
 import DailyTotal from "../../models/dailyAsset"; // اسم مدل واقعی رو بذار
 import connectToDatabase from '../../lib/mongoose';
@@ -37,7 +39,7 @@ export default async function handler(req, res) {
         const grouped = {};
 
         for (const item of allData) {
-            const m = moment(item.createdAt);
+            const m = moment(item.created_at);
             const shamsiMonth = m.format("jYYYY-jMM");
 
             if (!grouped[shamsiMonth]) {
@@ -47,7 +49,8 @@ export default async function handler(req, res) {
                 };
             }
 
-            grouped[shamsiMonth].total += item.totalValue;
+            const numericValue = Number(item.totalValue); // تبدیل رشته به عدد
+            grouped[shamsiMonth].total += numericValue;
             grouped[shamsiMonth].count += 1;
         }
 
@@ -56,7 +59,7 @@ export default async function handler(req, res) {
             total,
             average: total / count,
         }));
-console.log(result);
+        console.log(result);
 
         res.status(200).json(result);
     } catch (error) {
