@@ -1,6 +1,6 @@
 {
-  "name": "Your App Name",
-  "short_name": "App",
+  "name": "دارائیست",
+  "short_name": "Daraist",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
