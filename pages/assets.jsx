@@ -1,10 +1,4 @@
-// pages/assets.jsx
-
-import {
-  EditSquare,
-  FormatListBulleted,
-  RemoveCircleOutline,
-} from "@mui/icons-material";
+import { EditSquare, FormatListBulleted, RemoveCircleOutline } from "@mui/icons-material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { formatNumber } from '../utils/formatNymber';
@@ -69,7 +63,6 @@ export default function Home() {
       });
   
       if (res.ok) {
-        // حذف موفق، لیست رو آپدیت کن
         setAssets((prev) => prev.filter((item) => item._id !== id));
       } else {
         setError("خطا در حذف دارایی");
@@ -88,16 +81,15 @@ export default function Home() {
     );
   }
 
-
   return (
-    <div className=" !h-[calc(100vh-2rem)] bg-slate-200/50">
+    <div className="min-h-screen flex flex-col bg-slate-200/50">
       <div className="bg-[#234350] h-24 text-white flex justify-center items-center rounded-b-4xl">
         <span className="text-3xl mx-2">لیست دارایی‌ها</span>
         <div>
           <FormatListBulleted className="!text-5xl text-[#e3b34a]" />
         </div>
       </div>
-      <div className="grid gap-5 mt-4">
+      <div className="flex-grow grid gap-5 mt-4">
         {assets.map((item, index) => {
           let assetType = "";
           let assetAmountType = "";
@@ -142,6 +134,7 @@ export default function Home() {
             default:
               assetAmountType = item.assetAmountType;
           }
+
           const price = prices?.gold?.find(
             (itemm) => itemm.symbol == item.assetType
           );
@@ -153,9 +146,9 @@ export default function Home() {
           return (
             <div
               key={index}
-              className="h-24 px-4 boxShadow rounded-2xl bg-white mx-4 text-[#234350] flex justify-center items-start "
+              className="h-24 px-4 boxShadow rounded-2xl bg-white mx-4 text-[#234350] flex justify-center items-start"
             >
-              <div className=" h-24 flex flex-col w-5/6 justify-center items-start ">
+              <div className="h-24 flex flex-col w-5/6 justify-center items-start">
                 <div className="w-5/6">
                   <div className="flex w-full mb-3">
                     <div className="w-1/5 text-2xl font-bold">
@@ -169,7 +162,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="h-24 w-1/6 flex  justify-center items-center ">
+              <div className="h-24 w-1/6 flex justify-center items-center">
                 <Link
                   href={{
                     pathname: "/editAsset",
@@ -183,14 +176,18 @@ export default function Home() {
                 >
                   <EditSquare className="!text-2xl ml-2 text-[#e3b34a]" />
                 </Link>
-                
-                  <RemoveCircleOutline className="!text-2xl text-red-400 cursor-pointer" onClick={() => deleteHandler(item._id)} />
-                
+                <RemoveCircleOutline
+                  className="!text-2xl text-red-400 cursor-pointer"
+                  onClick={() => deleteHandler(item._id)}
+                />
               </div>
             </div>
           );
         })}
       </div>
+
+      {/* منو پایین صفحه */}
+      <div className="h-[90px]"></div>
     </div>
   );
 }

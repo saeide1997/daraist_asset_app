@@ -2,14 +2,17 @@ import { PrivacyTipRounded } from "@mui/icons-material";
 
 export default function PrivacyPolicy() {
   return (
-    <div className="!h-[calc(100vh-90px)]">
+    <div className="min-h-screen flex flex-col">
+      {/* Header Section */}
       <div className="bg-[#234350] h-24 text-white flex justify-center items-center rounded-b-4xl">
         <span className="text-3xl mx-2">حریم خصوصی</span>
         <div>
           <PrivacyTipRounded className="!text-5xl text-[#e3b34a]" />
         </div>
       </div>
-      <div className="p-4">
+
+      {/* Content Section */}
+      <div className="flex-grow p-4 overflow-y-auto">
         <p className="mb-4">
           اپلیکیشن <strong>دارائیست</strong> متعهد به حفظ حریم خصوصی کاربران خود
           است. این سند، نحوه جمع‌آوری، استفاده و محافظت از اطلاعات شخصی شما را
@@ -60,6 +63,11 @@ export default function PrivacyPolicy() {
         <p className="mt-6 text-sm text-gray-500 text-center">
           آخرین به‌روزرسانی: فروردین ۱۴۰۴
         </p>
+      </div>
+
+      {/* Footer/Menu Section */}
+      <div className="h-[90px]">
+        
       </div>
     </div>
   );

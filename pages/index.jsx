@@ -1,4 +1,3 @@
-// pages/index.jsx
 import { useEffect, useState } from "react";
 import SavingsIcon from "@mui/icons-material/Savings";
 import Asset from "../components/Asset";
@@ -6,6 +5,36 @@ import { AssetChart } from "../components/AssetChart";
 import Link from "next/link";
 import { formatNumber } from '../utils/formatNymber';
 import { useRouter } from "next/router";
+import cookie from 'cookie';
+
+export async function getServerSideProps(context) {
+  const { req, res } = context;
+  const cookies = cookie.parse(req.headers.cookie || '');
+
+  const token = cookies.token;
+
+  const checkRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/auth/checkToken`, {
+    headers: {
+      cookie: `token=${token}`,
+    },
+    credentials: "include",
+  });
+
+  const data = await checkRes.json();
+
+  if (!data.valid) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -14,33 +43,55 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const cookies = document.cookie; // کوکی‌ها را در سمت کلاینت بررسی کنید
-      console.log(cookies); // چاپ کوکی‌ها
-      const res = await fetch("/api/auth/checkToken", {
-        credentials: "include",
-      });
-      const data = await res.json();
-  
-      if (!data.valid) {
-        router.push("/login");
-      }
+    // رویدادهای مربوط به تغییر وضعیت اتصال اینترنت
+    const handleOnline = () => setIsOnline(true);  // آنلاین شد
+    const handleOffline = () => setIsOnline(false);  // آفلاین شد
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    // بررسی وضعیت اتصال در ابتدا
+    if (!navigator.onLine) {
+      setIsOnline(false);
+    }
+
+    // Clean up listeners
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
-  
-    checkAuth();
   }, []);
+
+  useEffect(() => {
+    // اگر کاربر آفلاین است، از رفتن به صفحه جلوگیری کن
+    if (!isOnline) {
+      alert("لطفاً اینترنت خود را وصل کنید!");
+    }
+  }, [isOnline]);
+
+  // اگر کاربر آنلاین نباشد، صفحه را متوقف می‌کنیم
+  if (!isOnline) {
+    return (
+      <div className="h-screen flex justify-center items-center bg-gray-100">
+        <div className="text-center">
+          <div className="text-2xl font-bold text-[#234350] mb-4">اتصال اینترنت برقرار نیست</div>
+          <div className="text-lg text-gray-500">لطفاً اینترنت خود را وصل کنید تا ادامه دهید.</div>
+        </div>
+      </div>
+    );
+  }
   
   useEffect(() => {
     const fetchAssets = async () => {
       try {
-        const response = await fetch("/api/assets",
-          {
-            method: "GET",
-            credentials: "include", // حتماً این باشه!
-          });
-      
+        const response = await fetch("/api/assets", {
+          method: "GET",
+          credentials: "include",
+        });
+
         if (response.ok) {
           const data = await response.json();
           setAssets(data);
@@ -81,11 +132,11 @@ export default function Home() {
   let totalValue = 0;
 
   assets.forEach((item) => {
-    const price = prices?.gold?.find((itemm) => itemm.symbol == item.assetType); // قیمت واحد
+    const price = prices?.gold?.find((itemm) => itemm.symbol == item.assetType);
 
-    if (!price) return; // اگر قیمت برای اون دارایی نبود، رد کن
+    if (!price) return;
 
-    const value = item.assetAmount * price?.price; // ارزش دارایی
+    const value = item.assetAmount * price?.price;
     totalValue += value;
   });
 
@@ -93,14 +144,12 @@ export default function Home() {
     fetch("/api/saveTotalAsset");
   }, []);
 
-
   useEffect(() => {
     const fetchStats = async () => {
       const res = await fetch("/api/stats");
       const json = await res.json();
       setData(json);
       console.log('stat', json);
-      
     };
 
     fetchStats();
@@ -120,7 +169,7 @@ export default function Home() {
   }
 
   return (
-    <div className=" bg-slate-200/50">
+    <div className="min-h-screen flex flex-col bg-slate-200/50">
       <div className="bg-[#234350] h-24 mb-3 text-white flex justify-center items-center rounded-b-4xl">
         <span className="text-3xl mx-2">دارایی‌های من</span>
         <div>
@@ -128,7 +177,8 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="py-2 grid gap-2">
+      {/* محتوا */}
+      <div className="flex-grow py-2 grid gap-2">
         {assets.slice(0, 3).map((item, index) => {
           let assetType = "";
           let assetAmountType = "";
@@ -192,23 +242,29 @@ export default function Home() {
         })}
       </div>
 
+      {/* جمع کل دارایی */}
       <div className="bg-[#234350] h-16 mx-4 mb-3 text-white flex justify-center items-center boxShadow rounded-4xl">
         <span className="text-lg mx-2">جمع کل دارایی بروز: </span>
         <span className="text-xl">{formatNumber(totalValue)}</span>
         <span className="text-xl mx-1">تومان</span>
       </div>
 
+      {/* نمودار دارایی */}
       <div className="boxShadow mx-4 mb-3">
         <AssetChart />
       </div>
 
-      <div>
+      {/* دکمه افزودن دارایی */}
+      <div className="mb-4">
         <Link href="/newAsset">
           <div className="bg-[#e3b34a] h-16 mx-4 text-white flex justify-center items-center boxShadow rounded-4xl text-2xl font-bold">
             افزودن دارایی جدید
           </div>
         </Link>
       </div>
+
+      {/* منو پایین صفحه */}
+      <div className="h-[90px]"></div>
     </div>
   );
 }

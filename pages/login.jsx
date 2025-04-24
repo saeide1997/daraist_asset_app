@@ -35,7 +35,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#e3b34a] px-4">
+    <div className="!h-screen flex items-center justify-center bg-[#e3b34a] px-4">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-2xl shadow-md w-full max-w-sm"
@@ -77,6 +77,12 @@ export default function LoginPage() {
         >
           {loading ? "در حال ورود..." : "ورود"}
         </button>
+        <div className="mt-4 text-center">
+  <span className="text-sm text-gray-600">حساب کاربری ندارید؟ </span>
+  <a href="/signup" className="text-[#234350] font-semibold hover:underline">
+    ثبت‌نام
+  </a>
+</div>
       </form>
     </div>
   );
