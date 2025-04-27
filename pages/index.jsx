@@ -1,3 +1,5 @@
+"use client"; // این خط باعث میشه صفحه فقط کلاینتی رندر بشه
+
 import { useEffect, useState } from "react";
 import SavingsIcon from "@mui/icons-material/Savings";
 import Asset from "../components/Asset";
@@ -5,36 +7,6 @@ import { AssetChart } from "../components/AssetChart";
 import Link from "next/link";
 import { formatNumber } from '../utils/formatNymber';
 import { useRouter } from "next/router";
-import cookie from 'cookie';
-
-export async function getServerSideProps(context) {
-  const { req, res } = context;
-  const cookies = cookie.parse(req.headers.cookie || '');
-
-  const token = cookies.token;
-
-  const checkRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/auth/checkToken`, {
-    headers: {
-      cookie: `token=${token}`,
-    },
-    credentials: "include",
-  });
-
-  const data = await checkRes.json();
-
-  if (!data.valid) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-}
 
 export default function Home() {
   const [hasMounted, setHasMounted] = useState(false);
@@ -49,6 +21,27 @@ export default function Home() {
   useEffect(() => {
     setHasMounted(true);
   }, []);
+
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const res = await fetch("/api/auth/checkToken", {
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (!data.valid) {
+          router.push("/login");
+        }
+      } catch (err) {
+        console.error("Token check error", err);
+        router.push("/login");
+      }
+    };
+
+    if (hasMounted) {
+      checkToken();
+    }
+  }, [hasMounted, router]);
 
   useEffect(() => {
     if (hasMounted) {
@@ -107,10 +100,14 @@ export default function Home() {
       };
 
       const fetchStats = async () => {
-        const res = await fetch("/api/stats");
-        const json = await res.json();
-        setData(json);
-        console.log('stat', json);
+        try {
+          const res = await fetch("/api/stats");
+          const json = await res.json();
+          setData(json);
+          console.log('stat', json);
+        } catch (err) {
+          console.error('Error fetching stats', err);
+        }
       };
 
       fetchAssets();
@@ -122,7 +119,7 @@ export default function Home() {
   }, [isOnline]);
 
   if (!hasMounted) {
-    return null; // چیزی رندر نکنه تا Mismatch نشه
+    return null; // جلوگیری از mismatch
   }
 
   if (!isOnline) {
@@ -152,7 +149,7 @@ export default function Home() {
   let totalValue = 0;
 
   assets.forEach((item) => {
-    const price = prices?.gold?.find((itemm) => itemm.symbol == item.assetType);
+    const price = prices?.gold?.find((itemm) => itemm.symbol === item.assetType);
     if (!price) return;
     const value = item.assetAmount * price?.price;
     totalValue += value;
@@ -213,8 +210,8 @@ export default function Home() {
               assetAmountType = item.assetAmountType;
           }
 
-          const price = prices?.gold?.find((itemm) => itemm.symbol == item.assetType);
-          if (!price) return;
+          const price = prices?.gold?.find((itemm) => itemm.symbol === item.assetType);
+          if (!price) return null;
 
           value = item.assetAmount * price?.price;
           return (
