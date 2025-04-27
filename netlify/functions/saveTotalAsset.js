@@ -5,6 +5,7 @@ import DailyTotal from '../../models/dailyAsset';
 import fetch from 'node-fetch'; // چون فانکشنه باید بیاری
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
+import User from '../../models/User';
 
 const SECRET = process.env.JWT_SECRET;
 
