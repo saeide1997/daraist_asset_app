@@ -37,42 +37,94 @@ export async function getServerSideProps(context) {
 }
 
 export default function Home() {
+  const [hasMounted, setHasMounted] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
   const [data, setData] = useState([]);
   const [assets, setAssets] = useState([]);
   const [prices, setPrices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
-    // رویدادهای مربوط به تغییر وضعیت اتصال اینترنت
-    const handleOnline = () => setIsOnline(true);  // آنلاین شد
-    const handleOffline = () => setIsOnline(false);  // آفلاین شد
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    // بررسی وضعیت اتصال در ابتدا
-    if (!navigator.onLine) {
-      setIsOnline(false);
-    }
-
-    // Clean up listeners
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
+    setHasMounted(true);
   }, []);
 
   useEffect(() => {
-    // اگر کاربر آفلاین است، از رفتن به صفحه جلوگیری کن
-    if (!isOnline) {
-      alert("لطفاً اینترنت خود را وصل کنید!");
+    if (hasMounted) {
+      setIsOnline(navigator.onLine);
+
+      const handleOnline = () => setIsOnline(true);
+      const handleOffline = () => setIsOnline(false);
+
+      window.addEventListener("online", handleOnline);
+      window.addEventListener("offline", handleOffline);
+
+      return () => {
+        window.removeEventListener("online", handleOnline);
+        window.removeEventListener("offline", handleOffline);
+      };
+    }
+  }, [hasMounted]);
+
+  useEffect(() => {
+    if (isOnline) {
+      const fetchAssets = async () => {
+        try {
+          const response = await fetch("/api/assets", {
+            method: "GET",
+            credentials: "include",
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setAssets(data);
+          } else {
+            setError("خطا در بارگذاری دارایی‌ها");
+          }
+        } catch (err) {
+          setError("خطا در برقراری ارتباط با سرور");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const fetchPrices = async () => {
+        try {
+          const response = await fetch("/api/prices");
+
+          if (response.ok) {
+            const data = await response.json();
+            setPrices(data);
+          } else {
+            setError("خطا در بارگذاری قیمت‌ها");
+          }
+        } catch (err) {
+          setError("خطا در برقراری ارتباط با سرور");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const fetchStats = async () => {
+        const res = await fetch("/api/stats");
+        const json = await res.json();
+        setData(json);
+        console.log('stat', json);
+      };
+
+      fetchAssets();
+      fetchPrices();
+      fetchStats();
+
+      fetch("/api/saveTotalAsset"); // ذخیره مجموع دارایی بدون نیاز به صبر
     }
   }, [isOnline]);
 
-  // اگر کاربر آنلاین نباشد، صفحه را متوقف می‌کنیم
+  if (!hasMounted) {
+    return null; // چیزی رندر نکنه تا Mismatch نشه
+  }
+
   if (!isOnline) {
     return (
       <div className="h-screen flex justify-center items-center bg-gray-100">
@@ -83,77 +135,6 @@ export default function Home() {
       </div>
     );
   }
-  
-  useEffect(() => {
-    const fetchAssets = async () => {
-      try {
-        const response = await fetch("/api/assets", {
-          method: "GET",
-          credentials: "include",
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setAssets(data);
-        } else {
-          setError("خطا در بارگذاری دارایی‌ها");
-        }
-      } catch (err) {
-        setError("خطا در برقراری ارتباط با سرور");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAssets();
-  }, []);
-
-  useEffect(() => {
-    const fetchPrices = async () => {
-      try {
-        const response = await fetch("/api/prices");
-
-        if (response.ok) {
-          const data = await response.json();
-          setPrices(data);
-        } else {
-          setError("خطا در بارگذاری دارایی‌ها");
-        }
-      } catch (err) {
-        setError("خطا در برقراری ارتباط با سرور");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPrices();
-  }, []);
-
-  let totalValue = 0;
-
-  assets.forEach((item) => {
-    const price = prices?.gold?.find((itemm) => itemm.symbol == item.assetType);
-
-    if (!price) return;
-
-    const value = item.assetAmount * price?.price;
-    totalValue += value;
-  });
-
-  useEffect(() => {
-    fetch("/api/saveTotalAsset");
-  }, []);
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      const res = await fetch("/api/stats");
-      const json = await res.json();
-      setData(json);
-      console.log('stat', json);
-    };
-
-    fetchStats();
-  }, []);
 
   if (loading) {
     return (
@@ -168,6 +149,15 @@ export default function Home() {
     return <div>{error}</div>;
   }
 
+  let totalValue = 0;
+
+  assets.forEach((item) => {
+    const price = prices?.gold?.find((itemm) => itemm.symbol == item.assetType);
+    if (!price) return;
+    const value = item.assetAmount * price?.price;
+    totalValue += value;
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-200/50">
       <div className="bg-[#234350] h-24 mb-3 text-white flex justify-center items-center rounded-b-4xl">
@@ -177,7 +167,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* محتوا */}
       <div className="flex-grow py-2 grid gap-2">
         {assets.slice(0, 3).map((item, index) => {
           let assetType = "";
@@ -223,10 +212,8 @@ export default function Home() {
             default:
               assetAmountType = item.assetAmountType;
           }
-          const price = prices?.gold?.find(
-            (itemm) => itemm.symbol == item.assetType
-          );
 
+          const price = prices?.gold?.find((itemm) => itemm.symbol == item.assetType);
           if (!price) return;
 
           value = item.assetAmount * price?.price;
