@@ -32,7 +32,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^5.10.6",
+    "@netlify/plugin-nextjs": "^5.10.7",
     "@tailwindcss/postcss": "^4.1.4",
     "@types/chance": "^1.1.6",
     "@types/node": "^20",
