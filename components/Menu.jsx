@@ -1,4 +1,4 @@
-import { Add, Home, Settings } from "@mui/icons-material";
+import { Add, Assessment, Home, ReportOff, Settings } from "@mui/icons-material";
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import Link from "next/link";
 export default function Menu() {
@@ -16,6 +16,10 @@ export default function Menu() {
         <Link  href="/assets" className="flex flex-col items-center cursor-pointer">
           <EqualizerIcon className="!text-3xl"/>
           <span>دارایی‌ها</span>
+        </Link>
+        <Link  href="/reports" className="flex flex-col items-center cursor-pointer">
+          <Assessment className="!text-3xl"/>
+          <span>نمودارها</span>
         </Link>
         <Link  href="/settings" className="flex flex-col items-center cursor-pointer">
           <Settings className="!text-3xl"/>

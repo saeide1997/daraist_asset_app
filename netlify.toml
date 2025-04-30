@@ -5,7 +5,7 @@ command = "npm run build"
 directory = "netlify/functions"
 
 [functions."saveTotalAsset"]
-  schedule = "9 7 * * *" # ساعت ۰۰:۰۰ ایران
+  schedule = "30 20 * * *" # ساعت ۰۰:۰۰ ایران
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

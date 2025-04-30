@@ -2,6 +2,7 @@ import { EditSquare, FormatListBulleted, RemoveCircleOutline } from "@mui/icons-
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { formatNumber } from '../utils/formatNymber';
+import InflationAssetChart from '../components/clcAssetChange';
 
 export default function Home() {
   const [prices, setPrices] = useState([]);
@@ -185,6 +186,7 @@ export default function Home() {
           );
         })}
       </div>
+      <InflationAssetChart/>
 
       {/* منو پایین صفحه */}
       <div className="h-[90px]"></div>
