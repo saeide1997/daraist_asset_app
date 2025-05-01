@@ -166,7 +166,7 @@ export default function Home() {
               <div className="h-24 w-1/6 flex justify-center items-center">
                 <Link
                   href={{
-                    pathname: "/editAsset",
+                    pathname: "/assets/editAsset",
                     query: {
                       type: item.assetType,
                       amount: item.assetAmount,

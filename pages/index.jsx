@@ -240,7 +240,7 @@ export default function Home() {
 
       {/* دکمه افزودن دارایی */}
       <div className="mb-4">
-        <Link href="/newAsset">
+        <Link href="/assets/newAsset">
           <div className="bg-[#e3b34a] h-16 mx-4 text-white flex justify-center items-center boxShadow rounded-4xl text-2xl font-bold">
             افزودن دارایی جدید
           </div>

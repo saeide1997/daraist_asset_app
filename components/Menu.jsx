@@ -9,11 +9,11 @@ export default function Menu() {
           <Home className="!text-3xl"/>
           <span>داشبورد</span>
         </Link>
-        <Link  href="/newAsset" className="flex flex-col items-center cursor-pointer">
+        <Link  href="/assets/newAsset" className="flex flex-col items-center cursor-pointer">
           <Add className="!text-3xl"/>
           <span>افزودن</span>
         </Link >
-        <Link  href="/assets" className="flex flex-col items-center cursor-pointer">
+        <Link  href="/assets/list" className="flex flex-col items-center cursor-pointer">
           <EqualizerIcon className="!text-3xl"/>
           <span>دارایی‌ها</span>
         </Link>

@@ -73,7 +73,7 @@ export default function NewAssetPage() {
 
     if (res.ok) {
       // هدایت به صفحه اصلی در صورت موفقیت
-      router.push("/assets");
+      router.push("/assets/list");
     } else {
       console.error("Error in adding asset");
     }
