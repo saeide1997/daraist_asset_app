@@ -23,7 +23,7 @@ export default function Menu() {
         </Link>
         <Link  href="/predicts" className="flex flex-col items-center cursor-pointer">
           <Assessment className="!text-3xl"/>
-          <span>نمودارها</span>
+          <span>پیشبینی‌ها</span>
         </Link>
         <Link  href="/settings" className="flex flex-col items-center cursor-pointer">
           <Settings className="!text-3xl"/>
