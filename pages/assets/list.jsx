@@ -1,8 +1,8 @@
 import { EditSquare, FormatListBulleted, RemoveCircleOutline } from "@mui/icons-material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { formatNumber } from '../utils/formatNymber';
-import InflationAssetChart from '../components/clcAssetChange';
+import { formatNumber } from '../../utils/formatNymber';
+import InflationAssetChart from '../../components/clcAssetChange';
 
 export default function Home() {
   const [prices, setPrices] = useState([]);
