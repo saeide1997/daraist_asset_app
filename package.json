@@ -1,0 +1,51 @@
+{
+  "name": "daraist",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@faker-js/faker": "^9.6.0",
+    "@hassanmojab/react-modern-calendar-datepicker": "^3.1.7",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/material": "^7.0.2",
+    "@tensorflow/tfjs": "^4.22.0",
+    "chance": "^1.1.12",
+    "chart.js": "^4.4.8",
+    "cookie": "^0.5.0",
+    "faker": "^6.6.6",
+    "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.2",
+    "ml-regression": "^6.2.0",
+    "moment": "^2.29.4",
+    "moment-jalaali": "^0.10.4",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.13.2",
+    "next": "15.3.0",
+    "next-pwa": "^5.6.0",
+    "node-cron": "^3.0.3",
+    "node-fetch": "^2.7.0",
+    "nodemon": "^3.1.9",
+    "react": "^19.0.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-datepicker2": "^3.3.13",
+    "react-dom": "^19.0.0",
+    "react-multi-date-picker": "^4.5.2"
+  },
+  "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.10.7",
+    "@tailwindcss/postcss": "^4.1.4",
+    "@types/chance": "^1.1.6",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
